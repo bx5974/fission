@@ -267,7 +267,7 @@ func pkgList(c *cli.Context) error {
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
-	fmt.Fprintf(w, "%v\t%v\t%v\t%v\n", "NAME", "STATUS", "ENV", "DESCRIPTION")
+	fmt.Fprintf(w, "%v\t%v\t%v\t%v\n", "NAME", "BUILD_STATUS", "ENV", "DESCRIPTION")
 	for _, pkg := range pkgList {
 		fmt.Fprintf(w, "%v\t%v\t%v\t%v\n", pkg.Metadata.Name,
 			pkg.Status.BuildStatus, pkg.Spec.Environment.Name, pkg.Spec.Description)
@@ -297,7 +297,7 @@ func pkgDelete(c *cli.Context) error {
 	fnList, err := getFunctionsByPackage(client, pkgName)
 
 	if !force && len(fnList) > 0 {
-		fatal("Package is used by multiple functions, use -f to force delete")
+		fatal("Package is used by at least one function, use -f to force delete")
 	}
 
 	err = client.PackageDelete(&metav1.ObjectMeta{
